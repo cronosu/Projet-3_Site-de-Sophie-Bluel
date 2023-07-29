@@ -62,13 +62,26 @@ const loggin = async (mail, motDePasse) => {
 
     } else if (response.status === 404) {
         const errorMotDePasse = document.querySelector('#errorMotDePasse');
-        errorMotDePasse.innerHTML = 'Mot de passe ou identifiant incorrect ou API non disponible';
-      
+        if (motDePasse.trim() == '') {
+            const errorMotDePasse = document.querySelector('#errorMotDePasse');
+            errorMotDePasse.innerHTML = 'Le champ Mot de passe est vide';
+            errorMotDePasse.style.color = 'red';
+
+        } else {
+            errorMotDePasse.innerHTML = 'Mot de passe ou identifiant incorrect ou API non disponible';
+        }
     }
 
     else if (response.status === 401) {
         const errorMotDePasse = document.querySelector('#errorMotDePasse');
-        errorMotDePasse.innerHTML = 'Mot de passe ou identifiant incorrect';
-      
+
+        if (motDePasse.trim() == '') {
+            const errorMotDePasse = document.querySelector('#errorMotDePasse');
+            errorMotDePasse.innerHTML = 'Le champ Mot de passe est vide';
+            errorMotDePasse.style.color = 'red';
+
+        } else {
+            errorMotDePasse.innerHTML = 'Mot de passe ou identifiant incorrect';
+        }
     }
 };
