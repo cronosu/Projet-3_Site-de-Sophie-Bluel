@@ -233,18 +233,9 @@ li:hover {
 
 .gallery img {
 	width: 100%;
-
+margin-bottom: 10px;
 }
 
-.gallery figcaption {
-	width: 100%;
-	display: inline-block;
-	margin: 10px 0;
-	font-size: 13px;
-
-
-
-}
 
 #contact {
 	width: 50%;
@@ -325,7 +316,7 @@ nav li:hover {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	color: #1D6154;
+	color: #611d1d;
 	min-width: 100px;
 	border: 1px solid #1D6154;
 	border-radius: 60px;

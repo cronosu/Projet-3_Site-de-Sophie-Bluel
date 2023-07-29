@@ -8,7 +8,8 @@
 		rel="stylesheet">
 	<link rel="stylesheet" href="./assets/style.css">
 	<link rel="stylesheet" href="./assets/styleLog.css">
-	<script type="text/javascript" src="codeLog.js"></script>
+	<script type="text/javascript" src="codeLogin.js" DEFER></script>
+
 </head>
 <html>
 
@@ -28,21 +29,21 @@
 		<div class="form-container">
 			<div class="form-container-titre">Log In</div>
 
-			<form class="form-container-form" method="get">
+			<form id="formulaire" class="form-container-form" method="POST">
 				<div class="form-container-form-input">
 					<div class="input-email">
 						<label for="eMail">E-mail</label>
-						<input type="text" name="eMail" id="eMail" required>
+						<input maxlength="100" type="text" name="eMail" id="eMail" required>
+						<span id="errorMail"></span>
 					</div>
 					<div class="input-mdp">
 						<label for="motDePasse">Mot de passe</label>
-						<input type="text" name="motDePasse" id="motDePasse" required>
+						<input maxlength="100" type="text" name="motDePasse" id="motDePasse" required>
+						<span id="errorMotDePasse" style="color:red"></span>
 					</div>
 				</div>
-				<button class="btn-login" >Se connecter</button>
-				<button class="btn-mdp-oublié">Mot de passe oublier</button>
-
-			</form>
+				<button class="btn-login" type="submit">Se connecter</button>
+			</form><button class="btn-mdp-oublié">Mot de passe oublier</button>
 		</div>
 
 	</main>
