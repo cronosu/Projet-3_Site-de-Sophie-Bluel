@@ -1,5 +1,5 @@
 
-if (localStorage.getItem("token")){
+if (localStorage.getItem("token")) {
     console.log("c'est ok");
 }
 
@@ -35,6 +35,7 @@ formulaire.addEventListener('submit', async function (e) {
     }
 
     await loggin(mail, motDePasse);
+
 });
 
 
@@ -44,15 +45,30 @@ const loggin = async (mail, motDePasse) => {
         password: motDePasse
     };
 
-        let response = await fetch('http://localhost:5678/api/users/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json;charset=utf-8',
-            },
-            body: JSON.stringify(user)
-        });
 
-        let result = await response.json();
+    let response = await fetch('http://localhost:5678/api/users/login', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8',
+        },
+        body: JSON.stringify(user)
+    });
+
+    let result = await response.json();
+
+    if (response.status === 200) {
         const token = localStorage.setItem("token", result.token);
-        return result;
+        document.location.href = "index.html";
+
+    } else if (response.status === 404) {
+        const errorMotDePasse = document.querySelector('#errorMotDePasse');
+        errorMotDePasse.innerHTML = 'Mot de passe ou identifiant incorrect ou API non disponible';
+      
+    }
+
+    else if (response.status === 401) {
+        const errorMotDePasse = document.querySelector('#errorMotDePasse');
+        errorMotDePasse.innerHTML = 'Mot de passe ou identifiant incorrect';
+      
+    }
 };
