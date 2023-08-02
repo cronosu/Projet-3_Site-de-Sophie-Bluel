@@ -11,18 +11,79 @@
 		rel="stylesheet">
 	<meta name="description" content="">
 	<link rel="stylesheet" href="./assets/style.css">
-
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+	<script src="code.js" defer></script>
 
 </head>
 
 <body>
+	<div id="myModal" class="modal">
+
+		<div class="modal-content">
+			<span class="close">&times;</span>
+			<div class="modal-content-div">
+				<h1>Galerie photo</h1>
+				<div class="modal-content-galery"></div>
+				<button class="modal-content-btn-ajout-photo">Ajouter une photo</button>
+				<button class="modal-content-btn-delete-galery">Supprimer la galerie</button>
+			</div>
+		</div>
+
+
+	</div>
+	<div id="myModal2" class="modal modal2">
+		<div class="modal-content">
+			<i class="fa-solid fa-arrow-left" style="color: #000000;"></i>
+			<span class="close">&times;</span>
+			<div class="modal-content-div modal2-div">
+				<h1>Ajout photo</h1>
+				<div class="modal-content-div-Ajout">
+					<i class="fa-sharp fa-regular fa-image"></i>
+					<button class="">+ Ajouter photo</button>
+					<div>jpg, png : 4mo max</div>
+				</div>
+				<div class="modal-content-modif-work">
+					<div class="modal-content-title-work">
+						<label for="titre">Titre</label>
+						<input type="text" id="titre">
+					</div>
+					<div class="modal-content-category-work">
+						<label for="categorie">Catégorie</label>
+						<select id="categorie">
+							<!--<option value=""></option>
+							<option value=""></option>
+							<option value=""></option>-->
+						</select>
+					</div>
+				</div>
+				<button class="modal2-div-btn-valide">Valider</button>
+			</div>
+		</div>
+
+
+	</div>
+	<div class="modal-validation" id="deleteConfirmationModal">
+		<div class="modal-validation-content">
+			<span class="modal-validation-close">&times;</span>
+			<p>Voulez-vous vraiment supprimer tous les projets ?</p>
+			<div class="modal-validation-content-btn">
+				<button class="modal-confirm-btn"><i class="fa-solid fa-triangle-exclamation"></i> Oui</button>
+				<button class="modal-cancel-btn">Annuler</button>
+			</div>
+		</div>
+	</div>
+	<div id="myBtn" class="log ModeEdition loginSwitch"><i class="myBtn fa-regular fa-pen-to-square"></i>
+		<button class="myBtn buttonEdition">Mode édition</button>
+		<div class="myBtn">publier les changements</div>
+	</div>
 	<header>
-		<h1>Sophie Bluel <span>Architecte d'inteérieur</span></h1>
+		<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
 		<nav>
 			<ul>
-				<li>projets</li>
-				<li>contact</li>
-				<li><a class="loginPage" href="login_page.html">login</a></li>
+				<li><a href="#portfolio">projets</a></li>
+				<li><a href="#contact">contact</a></li>
+				<li class="log logOut loginSwitch"><a>logout</a></li>
+				<li><a class="log loginPage " href="login_page.html">login</a></li>
 				<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
 			</ul>
 		</nav>
@@ -31,6 +92,11 @@
 		<section id="introduction">
 			<figure>
 				<img src="./assets/images/sophie-bluel.png" alt="">
+				<div class="log  loginSwitch introduction-mode-edition-btn">
+					<i class="myBtn fa-regular fa-pen-to-square"></i>
+					<button class="myBtn modif-btn">modifier</button>
+				</div>
+
 			</figure>
 			<article>
 				<h2>Designer d'espace</h2>
@@ -44,8 +110,13 @@
 			</article>
 		</section>
 		<section id="portfolio">
-			<h2>Mes Projets</h2>
-			<div class="mes-projet-filtre">
+			<div class="introduction-mode-edition-btn2">
+				<h2>Mes Projets</h2>
+				<i class="myBtn log loginSwitch fa-regular fa-pen-to-square"></i>
+				<button class="myBtn modif-btn log loginSwitch">modifier</button>
+			</div>
+
+			<div class="mes-projet-filtre ">
 				<ul class="mes-projets-filtre-ul">
 					<li class="mes-projets-filtre-li-1">Tous</li>
 					<li class="mes-projets-filtre-li-2">Objets</li>
@@ -53,7 +124,7 @@
 					<li class="mes-projets-filtre-li-4">Hôtels & restaurants</li>
 				</ul>
 			</div>
-			<div class="gallery">
+			<div id="gallery" class="gallery">
 
 			</div>
 		</section>
@@ -72,8 +143,14 @@
 		</section>
 	</main>
 
-
+	<footer>
+		<nav>
+			<ul>
+				<li>Mentions Légales</li>
+			</ul>
+		</nav>
+	</footer>
 </body>
-<script type="text/javascript" src="code.js"></script>
+
 
 </html>

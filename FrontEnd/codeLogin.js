@@ -1,8 +1,3 @@
-
-if (localStorage.getItem("token")) {
-    console.log("c'est ok");
-}
-
 const formulaire = document.querySelector('#formulaire');
 
 formulaire.addEventListener('submit', async function (e) {
