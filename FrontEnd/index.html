@@ -17,6 +17,7 @@
 </head>
 
 <body>
+
 	<div id="myModal" class="modal">
 
 		<div class="modal-content">
@@ -31,16 +32,18 @@
 
 
 	</div>
-	<div id="myModal2" class="modal modal2">
+	<form  id="myModal2" class="modal modal2">
 		<div class="modal-content">
 			<i class="fa-solid fa-arrow-left" style="color: #000000;"></i>
 			<span class="close">&times;</span>
 			<div class="modal-content-div modal2-div">
 				<h1>Ajout photo</h1>
 				<div class="modal-content-div-Ajout">
+					<img  id="imagePreview">
 					<i class="fa-sharp fa-regular fa-image"></i>
-					<button class="">+ Ajouter photo</button>
-					<div>jpg, png : 4mo max</div>
+					<button class="btn-ajout-Image">+ Ajouter photo</button>
+					<input type="file" id="image-work" accept=".jpg, .png"/>
+					<div id="image-fail">jpg, png : 4mo max</div>
 				</div>
 				<div class="modal-content-modif-work">
 					<div class="modal-content-title-work">
@@ -50,18 +53,15 @@
 					<div class="modal-content-category-work">
 						<label for="categorie">Catégorie</label>
 						<select id="categorie">
-							<!--<option value=""></option>
-							<option value=""></option>
-							<option value=""></option>-->
 						</select>
 					</div>
 				</div>
+				<div class="modal2-div-envoi-valide"></div>
 				<button class="modal2-div-btn-valide">Valider</button>
 			</div>
 		</div>
+	</form>
 
-
-	</div>
 	<div class="modal-validation" id="deleteConfirmationModal">
 		<div class="modal-validation-content">
 			<span class="modal-validation-close">&times;</span>

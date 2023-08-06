@@ -305,7 +305,9 @@ nav li:hover {
 /*bouton filtre*/
 a {
 	text-decoration: none;
+	color: black;
 }
+
 a:hover {
 	color: #000000;
 }
@@ -343,6 +345,7 @@ button {
 	background: #1D6154;
 	color: white;
 }
+
 .mes-projet-filtre ul .color:hover,
 .modal-content-btn-ajout-photo:hover {
 	color: white;
@@ -462,7 +465,8 @@ body {
 }
 
 /* The Close Button */
-.close, .modal-validation-close {
+.close,
+.modal-validation-close {
 	margin-right: 15px;
 	float: right;
 	font-size: 28px;
@@ -560,7 +564,7 @@ body {
 .modal-content-galery figure img {
 	width: 75px;
 	height: 100px;
-	
+
 
 }
 
@@ -575,7 +579,7 @@ body {
 	justify-content: center;
 	background-color: #E8F1F6;
 	width: 100%;
-	height: auto; 
+	height: auto;
 }
 
 .modal-content-div-Ajout i {
@@ -609,6 +613,7 @@ body {
 	gap: 10px;
 }
 
+
 .modal-content-title-work,
 .modal-content-category-work {
 	display: flex;
@@ -628,9 +633,23 @@ body {
 	border-radius: 0;
 	border: 0;
 	box-shadow: 0px 2px 14px 0px #00000017;
-	font-size: 26px;
+	font-size: 14px;
+	background-color: white;
+	padding: 0 15px;
 }
 
+.modal-content-title-work input:focus {
+	background-color: white;
+}
+
+
+.modal-content-title-work input {
+	width: 93.5%;
+}
+
+.modal-content-title-work {
+	margin-bottom: 20px;
+}
 
 .modal-content-modif-work,
 .modal-content-category-work select {
@@ -645,6 +664,7 @@ body {
 .modal-content-modif-work {
 	border-bottom: 1px solid #B3B3B3;
 	padding-bottom: 25px;
+
 }
 
 .modal2-div-btn-valide {
@@ -657,8 +677,9 @@ body {
 	font-family: Syne;
 
 }
-.fa-arrow-left{
-cursor: pointer;
+
+.fa-arrow-left {
+	cursor: pointer;
 }
 
 
@@ -675,28 +696,29 @@ cursor: pointer;
 	overflow: auto;
 	background-color: rgb(0, 0, 0);
 	background-color: rgba(0, 0, 0, 0.4);
-	
+
 }
 
 .modal-validation-content {
-    position: absolute;
+	position: absolute;
 	width: 400px;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #fefefe;
-    padding: 20px;
-    border-radius: 5px;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-color: #fefefe;
+	padding: 20px;
+	border-radius: 5px;
 	display: flex;
 	flex-direction: column;
-justify-content: space-between;
-align-items: center;
-padding: 50px;
-gap: 20px;
+	justify-content: space-between;
+	align-items: center;
+	padding: 50px;
+	gap: 20px;
 
 
 }
-.modal-validation-content-btn{
+
+.modal-validation-content-btn {
 	width: 100%;
 	display: flex;
 	justify-content: space-around;
@@ -705,25 +727,47 @@ gap: 20px;
 .modal-confirm-btn,
 .modal-cancel-btn {
 	color: white;
-    margin-top: 10px;
+	margin-top: 10px;
 	cursor: pointer;
 	border-radius: 3px;
 	height: 30px;
 }
 
-.modal-confirm-btn{
-    background-color:red;
+.modal-confirm-btn {
+	background-color: red;
 	border-radius: 3px;
-	width:50px; 
+	width: 50px;
 }
+
 .modal-cancel-btn {
-	background-color:rgb(178, 167, 167);
-	width:70px; 
+	background-color: rgb(178, 167, 167);
+	width: 70px;
 }
-.modal-validation-close{
+
+.modal-validation-close {
 	position: absolute;
 	top: 0;
 	right: -10px;
 }
 
 /*fin modal validation de suppression*/
+#image-work {
+	display: none;
+}
+
+.btn-ajout-Image {
+	cursor: pointer;
+}
+
+#imagePreview {
+	display: none;
+	height: 193px;
+	width: 129px;
+	background-color: #88393900;
+	object-fit: cover;
+}
+
+.modal2-div-btn-valide {
+	cursor: pointer;
+}
+
