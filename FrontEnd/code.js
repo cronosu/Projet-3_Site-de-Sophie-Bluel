@@ -1,5 +1,3 @@
-
-
 if (localStorage.getItem("token")) {
     console.log(localStorage.getItem("token"));
     const logginBtn = document.querySelectorAll(".log");
@@ -10,44 +8,29 @@ if (localStorage.getItem("token")) {
     });
 }
 
-
 const buttonLogOut = document.querySelector(".logOut");
 buttonLogOut.addEventListener("click", function () {
     localStorage.removeItem("token");
- 
     window.location.reload();
 });
-/*
+
+/** 
  * @param {string} url  - API endpoint
  * @param {function} callback  - function to call once the data is reached
  */
 const fetchData = async (url, callback) => {
-    try {
         const res = await fetch(url);
         const data = await res.json();
         callback(data);
-    } catch (err) {
-        if (err.code === "ECONNREFUSED") {
-            console.log("L'API est indisponible.");
-        } else if (err.code === "404") {
-            console.log("L'API n'a pas été trouvée.");
-        }
-        else {
-
-            console.table(err);
-        }
-    }
 };
 
 /** fetch datas from API and build elements from filter datas
  * @param {integer} btnFiltre number of button
 */
 const fetchFilteredDataAndDisplay = async (btnFiltre) => {
-    try {
         const res = await fetch('http://localhost:5678/api/works/');
         const data = await res.json();
         const dataFiltre = data.filter(element => element.categoryId == btnFiltre);
-        console.log(dataFiltre);
         const gallery = document.querySelector(".gallery");
         gallery.innerHTML = "";
         dataFiltre.forEach(elements => {
@@ -55,17 +38,7 @@ const fetchFilteredDataAndDisplay = async (btnFiltre) => {
             const figureElements = document.createElement('figure');
             figureElements.innerHTML = `<img src="${imageUrl}"><figcaption>${title}`;
             gallery.appendChild(figureElements);
-
         });
-    } catch (err) {
-        if (err.code === 'ECONNREFUSED') {
-            console.log("L'API est indisponible.")
-        } else if (err.code === 404) {
-            console.log("L'API n'a pas été trouvée.")
-        } else {
-            console.log(err)
-        }
-    }
 }
 
 /*  manip du DOM */
@@ -87,13 +60,11 @@ const showData = (data) => {
  * @param {string} content - The text content to be set for the created element.
  * @returns {HTMLElement} - The newly created HTML element with the specified tag and content.
  */
-
 const createElemt = (elem, content) => {
     const elemCreated = document.createElement(elem);
     elemCreated.innerHTML += content;
     return elemCreated;
 };
-
 
 const filtre = document.querySelector(".mes-projets-filtre-ul");
 const li = filtre.querySelectorAll("li");
@@ -102,42 +73,32 @@ const btn2 = document.querySelector(".mes-projets-filtre-li-2");
 const btn3 = document.querySelector(".mes-projets-filtre-li-3");
 const btn4 = document.querySelector(".mes-projets-filtre-li-4");
 const gallery = document.querySelector(".gallery");
-const categoryWorkCreated = document.querySelector("#categorie");
 
-
-btn1.addEventListener("click", function () {
+function changeColorInFiltre(btnFiltre) {
     gallery.innerHTML = ``;
     li.forEach((el) => {
         el.classList.remove("color");
     });
-    btn1.classList.add("color")
+    btnFiltre.classList.add("color")
+};
+
+btn1.addEventListener("click", function () {
+    changeColorInFiltre(btn1);
     fetchData("http://localhost:5678/api/works/", showData);
 });
 
 btn2.addEventListener("click", function () {
-    gallery.innerHTML = ``;
-    li.forEach((el) => {
-        el.classList.remove("color");
-    });
-    btn2.classList.add("color")
+    changeColorInFiltre(btn2)
     fetchFilteredDataAndDisplay(1);
 });
 
 btn3.addEventListener("click", function () {
-    gallery.innerHTML = ``;
-    li.forEach((el) => {
-        el.classList.remove("color");
-    });
-    btn3.classList.add("color")
+    changeColorInFiltre(btn3)
     fetchFilteredDataAndDisplay(2);
 });
 
 btn4.addEventListener("click", function () {
-    gallery.innerHTML = ``;
-    li.forEach((el) => {
-        el.classList.remove("color");
-    });
-    btn4.classList.add("color")
+    changeColorInFiltre(btn4)
     fetchFilteredDataAndDisplay(3);
 });
 
@@ -165,23 +126,20 @@ const fetchDataAndDisplayOnModal = async () => {
         const btnDelete = document.querySelectorAll(".image-delete");
 
         btnDelete[i].addEventListener("click", function (event) {
-            const id = event.target.dataset.articleId;
             event.preventDefault();
+            const id = event.target.dataset.articleId;
             deleteWork(`http://localhost:5678/api/works/${id}`)
                 .then(() => {
                     console.log(`L'article avec l'ID ${id} a été supprimé.`);
                     fetchDataAndDisplayOnModal();
                     fetchData("http://localhost:5678/api/works/", showData);
                 })
-
         })
     };
-
-
 };
+
 //delete work with token
 const deleteWork = async (url) => {
-    try {
         const headers = {
             Authorization: `Bearer ${localStorage.getItem("token")}`
         };
@@ -189,28 +147,11 @@ const deleteWork = async (url) => {
             method: "DELETE",
             headers,
         });
-
-    } catch (err) {
-        console.log(err);
-    }
 };
 
 //delete all work with token
 const btnDeleteAllWork = document.querySelector('.modal-content-btn-delete-galery');
-/*btnDeleteAllWork.addEventListener("click", async function (event) {
-    event.preventDefault();
-    const res = await fetch("http://localhost:5678/api/works/");
-    const data = await res.json();
-    for (let i = 0; i < data.length; i++) {
-        const id = data[i].id;
-        setTimeout(async () => {
-            await deleteWork(`http://localhost:5678/api/works/${id}`);
-            console.log(`L'article avec l'ID ${id} a été supprimé.`);
-            fetchDataAndDisplayOnModal();
-            fetchData("http://localhost:5678/api/works/", showData);
-        }, i * 400);
-    }
-});*/
+
 //validation de suppression
 // Sélectionner le bouton de suppression
 const btnDeleteAllWorkb = document.querySelector('.modal-content-btn-delete-galery');
@@ -245,28 +186,22 @@ modalConfirmBtn.addEventListener("click", async function (event) {
         const id = data[i].id;
         setTimeout(async () => {
             await deleteWork(`http://localhost:5678/api/works/${id}`);
-            console.log(`L'article avec l'ID ${id} a été supprimé.`);
             fetchDataAndDisplayOnModal();
             fetchData("http://localhost:5678/api/works/", showData);
         }, i * 400);
     }
 });
 
-
 // Gérer le clic sur le bouton "Annuler" dans la modal
 modalCancelBtn.addEventListener("click", function (event) {
     // Fermer la modal de confirmation
     modalb.style.display = "none";
-
 });
 
 //fin validation de suppression*/
-/* Get the button that opens the modal
-var btn = document.getElementById("myBtn"); When the user clicks the button, open the modal 
-btn.onclick = function() {
-    modal.style.display = "block";
-}*/
 
+// open the modal with all btn edition
+const categoryWorkCreated = document.querySelector("#categorie");
 
 const allBtn = document.querySelectorAll(".myBtn");
 allBtn.forEach((btn) => {
@@ -308,7 +243,6 @@ window.onclick = function (event) {
     } else if (event.target == modalValidation) {
         modalValidation.style.display = "none";
     };
-
 };
 
 //fin Modal1//
@@ -334,7 +268,6 @@ btnReturn.addEventListener("click", function () {
     reset();
 });
 
-
 //Add categorie at modal 2//
 const fetchDataCategory = async () => {
     const res = await fetch('http://localhost:5678/api/categories/');
@@ -358,7 +291,6 @@ let selectedCategoryIdInSelect = "";
 selectCategorie.addEventListener("change", function () {
     const selectedCategoryId = selectCategorie.options[selectCategorie.selectedIndex].id;
     selectedCategoryIdInSelect = selectedCategoryId;
-    console.log(selectedCategoryIdInSelect);
 });
 
 //add picture to new work
@@ -379,17 +311,17 @@ const reset = () => {
     imageWork = "";
     imageFail.innerHTML = "";
     titleWork.value = "";
-    console.log(document.querySelector('.fa-regular'));
     document.querySelector('.fa-regular').style.display = "block";
     document.querySelector('.btn-ajout-Image').style.display = "block";
     document.querySelector('.fa-regular').style.display = "block";
     document.querySelector('.modal-content-div-Ajout').style.padding = "40px 0 40px";
     categoryWork.value = "";
-    console.log(inputImage.files);
     inputImage.value = "";
     selectedCategoryIdInSelect = "";
     document.querySelector(".modal2-div-btn-valide").style.backgroundColor = "#A7A7A7";
 };
+
+
 btnAjoutImage.addEventListener('click', (event) => {
     // Déclencher le clic sur l'élément input
     inputImage.click();
@@ -398,37 +330,43 @@ btnAjoutImage.addEventListener('click', (event) => {
 
 //  Default btn valider
 const btn = document.querySelector(".modal2-div-btn-valide");
-btn.addEventListener('click', (event) => {
-    event.preventDefault();
+let workSendBoxTimeout; // Variable pour stocker le délai actif
 
+/**
+ * @param {string} message  - message for formulaire ok or not
+ * @param {string} color  - color of message
+ */
+function SendPush(message, color) {
     const workSendBox = document.querySelector(".modal2-div-envoi-valide");
-    workSendBox.innerHTML = "Veuillez remplir le formulaire";
+    workSendBox.innerHTML = message;
     workSendBox.style.fontSize = "25px";
-    workSendBox.style.color = "red";
-    // Effacer le message après 10 secondes avec un effet cool
-    setTimeout(() => {
-        // Ajoutez ici l'effet de disparition cool, par exemple une transition CSS
+    workSendBox.style.color = color;
+
+    clearTimeout(workSendBoxTimeout);
+
+    // Effacer le message
+    workSendBoxTimeout = setTimeout(() => {
+       
         workSendBox.style.transition = "opacity 1s ease-out, font-size 0.5s ease-out";
         workSendBox.style.opacity = "0";
         workSendBox.style.fontSize = "12px";
-      
 
-        // Supprimer le contenu après la transition
+        // Supprime le contenu après la transition
         setTimeout(() => {
             workSendBox.innerHTML = "";
             workSendBox.style.fontSize = "0px";
             workSendBox.style.opacity = "1"; // Réinitialiser l'opacité
             workSendBox.style.transition = "";
-
-        }, 500); // Attendre 1 seconde pour la transition de disparition
+        }, 500); // Attendre pour la transition de disparition
     }, 5000);
-}
-);
+};
 
-
+btn.addEventListener('click', (event) => {
+    event.preventDefault();
+    SendPush("Veuillez remplir le formulaire", "red")
+});
 
 inputImage.addEventListener('change', () => {
-
     // Réagir aux changements de l'élément input (par exemple, téléchargement d'une image)
     const selectedImage = inputImage.files;
 
@@ -438,7 +376,6 @@ inputImage.addEventListener('change', () => {
             // Afficher l'aperçu de l'image sélectionnée
             imagePreview.src = URL.createObjectURL(selectedImage[0]);
             imageFail.innerHTML = "";
-            console.log(document.querySelector('.fa-regular'));
             document.querySelector('.fa-regular').style.display = "none";
             document.querySelector('.btn-ajout-Image').style.display = "none";
             document.querySelector('.fa-regular').style.display = "none";
@@ -446,7 +383,6 @@ inputImage.addEventListener('change', () => {
             imageFail.style.display = "none";
             imageWork = "ok";
             imagePreview.style.display = "block";
-
 
         } else if (selectedImage[0].size >= 4 * 1024 * 1024) {
             imageFail.innerHTML = "L'image est trop volumineuse. Veuillez sélectionner une image de moins de 4 Mo.";
@@ -459,32 +395,11 @@ inputImage.addEventListener('change', () => {
     }
 
 });
-function SendPush(message, color) {
-    const workSendBox = document.querySelector(".modal2-div-envoi-valide");
-    workSendBox.innerHTML = message;
-    workSendBox.style.fontSize = "25px";
-    workSendBox.style.color = color;
-    // Effacer le message après 10 secondes avec un effet cool
-    setTimeout(() => {
-        // Ajoutez ici l'effet de disparition cool, par exemple une transition CSS
-        workSendBox.style.transition = "opacity 1s ease-out, font-size 0.5s ease-out";
-        workSendBox.style.opacity = "0";
-        workSendBox.style.fontSize = "12px";
 
-        // Supprimer le contenu après la transition
-        setTimeout(() => {
-            workSendBox.innerHTML = "";
-            workSendBox.style.fontSize = "0px";
-            workSendBox.style.opacity = "1"; // Réinitialiser l'opacité
-            workSendBox.style.transition = "";
-
-        }, 500); // Attendre 1 seconde pour la transition de disparition
-    }, 5000);
+function resetAfterSendPush() {
     formData = "";
     reset();
 };
-
-
 
 const sendWork = async () => {
     let formData = new FormData();
@@ -504,13 +419,16 @@ const sendWork = async () => {
         },
         body: formData
     });
-    console.log(response.status);
     if (response.ok) {
         SendPush("Projet envoyé", "green");
+        resetAfterSendPush();
+        
     } else if (response.status === 400 || response.status === 401 || response.status === 500) {
         SendPush("Erreur de l'API", "red");
+        resetAfterSendPush();
     } else {
         SendPush("Veuillez remplir le formulaire", "red");
+        resetAfterSendPush();
     }
 
     fetchData("http://localhost:5678/api/works/", showData);
@@ -520,9 +438,6 @@ const sendWork = async () => {
 function updateButtonColor() {
 
     if (imageWork == "ok" && titleWork.value !== "" && categoryWork.value !== "") {
-        console.log(imageWork);
-        console.log(titleWork.value);
-        console.log(categoryWork.value);
         const btn = document.querySelector(".modal2-div-btn-valide");
         btn.style.backgroundColor = "#1D6154";
         btn.removeEventListener('click', sendWork, true);
@@ -536,16 +451,7 @@ function updateButtonColor() {
 titleWork.addEventListener('change', updateButtonColor);
 categoryWork.addEventListener('change', updateButtonColor);
 
-
-
-
-
 //fin Modal2//
-
-
-
-
-
 
 const init = () => {
     fetchData("http://localhost:5678/api/works/", showData);
