@@ -19,26 +19,26 @@ buttonLogOut.addEventListener("click", function () {
  * @param {function} callback  - function to call once the data is reached
  */
 const fetchData = async (url, callback) => {
-        const res = await fetch(url);
-        const data = await res.json();
-        callback(data);
+    const res = await fetch(url);
+    const data = await res.json();
+    callback(data);
 };
 
 /** fetch datas from API and build elements from filter datas
  * @param {integer} btnFiltre number of button
 */
 const fetchFilteredDataAndDisplay = async (btnFiltre) => {
-        const res = await fetch('http://localhost:5678/api/works/');
-        const data = await res.json();
-        const dataFiltre = data.filter(element => element.categoryId == btnFiltre);
-        const gallery = document.querySelector(".gallery");
-        gallery.innerHTML = "";
-        dataFiltre.forEach(elements => {
-            const { imageUrl, title } = elements;
-            const figureElements = document.createElement('figure');
-            figureElements.innerHTML = `<img src="${imageUrl}"><figcaption>${title}`;
-            gallery.appendChild(figureElements);
-        });
+    const res = await fetch('http://localhost:5678/api/works/');
+    const data = await res.json();
+    const dataFiltre = data.filter(element => element.categoryId == btnFiltre);
+    const gallery = document.querySelector(".gallery");
+    gallery.innerHTML = "";
+    dataFiltre.forEach(elements => {
+        const { imageUrl, title } = elements;
+        const figureElements = document.createElement('figure');
+        figureElements.innerHTML = `<img src="${imageUrl}"><figcaption>${title}`;
+        gallery.appendChild(figureElements);
+    });
 }
 
 /*  manip du DOM */
@@ -140,13 +140,13 @@ const fetchDataAndDisplayOnModal = async () => {
 
 //delete work with token
 const deleteWork = async (url) => {
-        const headers = {
-            Authorization: `Bearer ${localStorage.getItem("token")}`
-        };
-        const res = await fetch(url, {
-            method: "DELETE",
-            headers,
-        });
+    const headers = {
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+    };
+    const res = await fetch(url, {
+        method: "DELETE",
+        headers,
+    });
 };
 
 //delete all work with token
@@ -218,6 +218,7 @@ var span = document.querySelectorAll(".close");
 modalValidation.addEventListener("click", function () {
     modalValidation.style.display = "none";
     categoryWorkCreated.innerHTML = "";
+    reset();
 });
 
 // When the user clicks on <span> (x), close the modal
@@ -272,7 +273,7 @@ btnReturn.addEventListener("click", function () {
 const fetchDataCategory = async () => {
     const res = await fetch('http://localhost:5678/api/categories/');
     const data = await res.json();
-    const choise0 = createElemt("option", "");
+    const choise0 = createElemt("option", " ");
     categoryWorkCreated.appendChild(choise0);
     data.forEach((element) => {
         const name = element.name;
@@ -309,7 +310,6 @@ const reset = () => {
     imageFail.style.display = "block";
     imagePreview.style.display = "none";
     imageWork = "";
-    imageFail.innerHTML = "";
     titleWork.value = "";
     document.querySelector('.fa-regular').style.display = "block";
     document.querySelector('.btn-ajout-Image').style.display = "block";
@@ -319,6 +319,8 @@ const reset = () => {
     inputImage.value = "";
     selectedCategoryIdInSelect = "";
     document.querySelector(".modal2-div-btn-valide").style.backgroundColor = "#A7A7A7";
+    imageFail.innerHTML = "jpg, png : 4mo max";
+    imageFail.style.color = "black";
 };
 
 
@@ -346,7 +348,7 @@ function SendPush(message, color) {
 
     // Effacer le message
     workSendBoxTimeout = setTimeout(() => {
-       
+
         workSendBox.style.transition = "opacity 1s ease-out, font-size 0.5s ease-out";
         workSendBox.style.opacity = "0";
         workSendBox.style.fontSize = "12px";
@@ -361,37 +363,59 @@ function SendPush(message, color) {
     }, 5000);
 };
 
-btn.addEventListener('click', (event) => {
+// listener par defaut du btn valider
+
+const eventCallback = (event) => {
     event.preventDefault();
-    SendPush("Veuillez remplir le formulaire", "red")
-});
+    SendPush("Veuillez remplir le formulaire", "red");
+};
+
+btn.addEventListener('click', eventCallback);
+
+
+// listener a l'input image
 
 inputImage.addEventListener('change', () => {
     // Réagir aux changements de l'élément input (par exemple, téléchargement d'une image)
     const selectedImage = inputImage.files;
 
     if (selectedImage) {
-        // Vérifier la taille de l'image (en octets)
-        if (selectedImage[0].size < 4 * 1024 * 1024) { // 4 Mo en octets
-            // Afficher l'aperçu de l'image sélectionnée
-            imagePreview.src = URL.createObjectURL(selectedImage[0]);
-            imageFail.innerHTML = "";
-            document.querySelector('.fa-regular').style.display = "none";
-            document.querySelector('.btn-ajout-Image').style.display = "none";
-            document.querySelector('.fa-regular').style.display = "none";
-            document.querySelector('.modal-content-div-Ajout').style.padding = "0";
-            imageFail.style.display = "none";
-            imageWork = "ok";
-            imagePreview.style.display = "block";
-
-        } else if (selectedImage[0].size >= 4 * 1024 * 1024) {
-            imageFail.innerHTML = "L'image est trop volumineuse. Veuillez sélectionner une image de moins de 4 Mo.";
+        function messageImage(message) {
             imageFail.style.color = "red";
             inputImage.value = ''; // Réinitialiser le champ de téléchargement
             imageWork = "";
-        }
+            imageFail.innerHTML = message;
 
+        };
+
+        if (selectedImage[0].type == "image/jpeg" || selectedImage[0].type == "image/png") {
+            console.log(selectedImage[0].type);
+            //
+            if (selectedImage[0].size < 4 * 1024 * 1024) { // 4 Mo en octets
+                // Afficher l'aperçu de l'image sélectionnée
+                imagePreview.src = URL.createObjectURL(selectedImage[0]);
+                imageFail.innerHTML = "";
+                document.querySelector('.fa-regular').style.display = "none";
+                document.querySelector('.btn-ajout-Image').style.display = "none";
+                document.querySelector('.fa-regular').style.display = "none";
+                document.querySelector('.modal-content-div-Ajout').style.padding = "0";
+                imageFail.style.display = "none";
+                imageWork = "ok";
+                imagePreview.style.display = "block";
+
+            } else if (selectedImage[0].size >= 4 * 1024 * 1024) {
+                messageImage("L'image est trop volumineuse.<br> Veuillez sélectionner une image de moins de 4 Mo.");
+
+            }
+        } else {
+            console.log(selectedImage[0].type);
+            messageImage("L'image doit être au format jpeg ou png <br> et doit faire moins de 4 Mo.");
+
+        };
+
+        // Vérifier la taille de l'image (en octets)
         updateButtonColor();
+
     }
 
 });
@@ -401,11 +425,13 @@ function resetAfterSendPush() {
     reset();
 };
 
-const sendWork = async () => {
+const sendWork = async (event) => {
+    event.preventDefault();
     let formData = new FormData();
 
     if (inputImage.files[0].type === "image/jpeg") {
         formData.append("image", inputImage.files[0], 'image.jpeg');
+
     } else if (inputImage.files[0].type === "image/png") {
         formData.append("image", inputImage.files[0], 'image.png');
     }
@@ -422,26 +448,30 @@ const sendWork = async () => {
     if (response.ok) {
         SendPush("Projet envoyé", "green");
         resetAfterSendPush();
-        
+        fetchData("http://localhost:5678/api/works/", showData);
+        fetchDataAndDisplayOnModal();
+    } else if (response.status === 400 && titleWork.value.trim() == "") {
+        SendPush("Veuillez remplir le formulaire", "red");
+
+    } else if (response.status === 400 && categoryWork.value == "") {
+        SendPush("Veuillez remplir le formulaire", "red");
+
     } else if (response.status === 400 || response.status === 401 || response.status === 500) {
         SendPush("Erreur de l'API", "red");
         resetAfterSendPush();
     } else {
         SendPush("Veuillez remplir le formulaire", "red");
-        resetAfterSendPush();
+
     }
 
-    fetchData("http://localhost:5678/api/works/", showData);
-    fetchDataAndDisplayOnModal();
 };
 
 function updateButtonColor() {
 
     if (imageWork == "ok" && titleWork.value !== "" && categoryWork.value !== "") {
-        const btn = document.querySelector(".modal2-div-btn-valide");
         btn.style.backgroundColor = "#1D6154";
-        btn.removeEventListener('click', sendWork, true);
-        btn.addEventListener('click', sendWork, true);
+        btn.removeEventListener('click', eventCallback);
+        btn.addEventListener('click', sendWork);
 
     } else {
         document.querySelector(".modal2-div-btn-valide").style.backgroundColor = "#A7A7A7";
