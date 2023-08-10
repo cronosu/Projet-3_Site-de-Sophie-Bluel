@@ -19,9 +19,17 @@ buttonLogOut.addEventListener("click", function () {
  * @param {function} callback  - function to call once the data is reached
  */
 const fetchData = async (url, callback) => {
-    const res = await fetch(url);
+   try{ const res = await fetch(url);
     const data = await res.json();
     callback(data);
+    
+}catch(Error){
+   
+    let header = document.querySelector('.image-sophie-bluel');
+  header.innerHTML ='<img src="./assets/images/404.jpeg" alt="page404">';
+console.log(header);
+}
+
 };
 
 /** fetch datas from API and build elements from filter datas
@@ -284,8 +292,8 @@ const fetchDataCategory = async () => {
         categoryWorkCreated.appendChild(categoryWorkChoise);
     });
 };
-//récupére l'id de la catégorie choisi
 
+//récupére l'id de la catégorie choisi
 const selectCategorie = document.getElementById("categorie");
 
 let selectedCategoryIdInSelect = "";
@@ -323,7 +331,6 @@ const reset = () => {
     imageFail.style.color = "black";
 };
 
-
 btnAjoutImage.addEventListener('click', (event) => {
     // Déclencher le clic sur l'élément input
     inputImage.click();
@@ -343,12 +350,10 @@ function SendPush(message, color) {
     workSendBox.innerHTML = message;
     workSendBox.style.fontSize = "25px";
     workSendBox.style.color = color;
-
     clearTimeout(workSendBoxTimeout);
 
     // Effacer le message
     workSendBoxTimeout = setTimeout(() => {
-
         workSendBox.style.transition = "opacity 1s ease-out, font-size 0.5s ease-out";
         workSendBox.style.opacity = "0";
         workSendBox.style.fontSize = "12px";
@@ -364,17 +369,14 @@ function SendPush(message, color) {
 };
 
 // listener par defaut du btn valider
-
 const eventCallback = (event) => {
     event.preventDefault();
     SendPush("Veuillez remplir le formulaire", "red");
 };
-
 btn.addEventListener('click', eventCallback);
 
 
 // listener a l'input image
-
 inputImage.addEventListener('change', () => {
     // Réagir aux changements de l'élément input (par exemple, téléchargement d'une image)
     const selectedImage = inputImage.files;
@@ -385,9 +387,7 @@ inputImage.addEventListener('change', () => {
             inputImage.value = ''; // Réinitialiser le champ de téléchargement
             imageWork = "";
             imageFail.innerHTML = message;
-
         };
-
         if (selectedImage[0].type == "image/jpeg" || selectedImage[0].type == "image/png") {
             console.log(selectedImage[0].type);
             //
@@ -402,22 +402,17 @@ inputImage.addEventListener('change', () => {
                 imageFail.style.display = "none";
                 imageWork = "ok";
                 imagePreview.style.display = "block";
-
             } else if (selectedImage[0].size >= 4 * 1024 * 1024) {
                 messageImage("L'image est trop volumineuse.<br> Veuillez sélectionner une image de moins de 4 Mo.");
-
             }
         } else {
             console.log(selectedImage[0].type);
             messageImage("L'image doit être au format jpeg ou png <br> et doit faire moins de 4 Mo.");
-
         };
 
         // Vérifier la taille de l'image (en octets)
         updateButtonColor();
-
     }
-
 });
 
 function resetAfterSendPush() {
@@ -428,7 +423,6 @@ function resetAfterSendPush() {
 const sendWork = async (event) => {
     event.preventDefault();
     let formData = new FormData();
-
     if (inputImage.files[0].type === "image/jpeg") {
         formData.append("image", inputImage.files[0], 'image.jpeg');
 
@@ -437,7 +431,6 @@ const sendWork = async (event) => {
     }
     formData.append("title", titleWork.value);
     formData.append("category", selectedCategoryIdInSelect);
-
     const response = await fetch("http://localhost:5678/api/works", {
         method: "POST",
         headers: {
@@ -461,18 +454,14 @@ const sendWork = async (event) => {
         resetAfterSendPush();
     } else {
         SendPush("Veuillez remplir le formulaire", "red");
-
     }
-
 };
 
 function updateButtonColor() {
-
     if (imageWork == "ok" && titleWork.value !== "" && categoryWork.value !== "") {
         btn.style.backgroundColor = "#1D6154";
         btn.removeEventListener('click', eventCallback);
         btn.addEventListener('click', sendWork);
-
     } else {
         document.querySelector(".modal2-div-btn-valide").style.backgroundColor = "#A7A7A7";
     }
@@ -482,7 +471,6 @@ titleWork.addEventListener('change', updateButtonColor);
 categoryWork.addEventListener('change', updateButtonColor);
 
 //fin Modal2//
-
 const init = () => {
     fetchData("http://localhost:5678/api/works/", showData);
 };
