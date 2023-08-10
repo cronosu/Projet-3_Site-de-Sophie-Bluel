@@ -19,17 +19,14 @@ buttonLogOut.addEventListener("click", function () {
  * @param {function} callback  - function to call once the data is reached
  */
 const fetchData = async (url, callback) => {
-   try{ const res = await fetch(url);
-    const data = await res.json();
-    callback(data);
-    
-}catch(Error){
-   
-    let header = document.querySelector('.image-sophie-bluel');
-  header.innerHTML ='<img src="./assets/images/404.jpeg" alt="page404">';
-console.log(header);
-}
-
+    try {
+        const res = await fetch(url);
+        const data = await res.json();
+        callback(data);
+    } catch (Error) {
+        let header = document.querySelector('.image-sophie-bluel');
+        header.innerHTML = '<img src="./assets/images/404.jpeg" alt="page404">';
+    }
 };
 
 /** fetch datas from API and build elements from filter datas
@@ -44,7 +41,7 @@ const fetchFilteredDataAndDisplay = async (btnFiltre) => {
     dataFiltre.forEach(elements => {
         const { imageUrl, title } = elements;
         const figureElements = document.createElement('figure');
-        figureElements.innerHTML = `<img src="${imageUrl}"><figcaption>${title}`;
+        figureElements.innerHTML = `<img src="${imageUrl}" alt="${title}"><figcaption>${title}</figcaption>`;
         gallery.appendChild(figureElements);
     });
 }
@@ -57,7 +54,7 @@ const showData = (data) => {
         const img = createElemt("img", "");
         img.src = data[i].imageUrl;
         const titre = data[i].title;
-        const article = createElemt("figure", `<img src="${img.src}">${titre}`);
+        const article = createElemt("figure", `<img src="${img.src}" alt="${titre}"><figcaption>${titre}</figcaption>`);
         gallery.appendChild(article);
     }
 };
@@ -117,7 +114,6 @@ var modal2 = document.getElementById("myModal2");
 var modalValidation = document.getElementById("deleteConfirmationModal");
 // Get gallery on the modal
 const fetchDataAndDisplayOnModal = async () => {
-
     const res = await fetch('http://localhost:5678/api/works/');
     const data = await res.json();
     const galleryModeEdition = document.querySelector(".modal-content-galery");
@@ -125,8 +121,9 @@ const fetchDataAndDisplayOnModal = async () => {
     for (let i = 0; i < data.length; i++) {
         const id = data[i].id;
         const imageUrl = data[i].imageUrl;
+        const titre = data[i].title;
         const figureElements = document.createElement('figure');
-        figureElements.innerHTML = `<img src="${imageUrl}"><i data-article-id="${id}" class="image-delete fa-solid fa-trash-can fa-sm"></i><button  class="modal-btn-edite">éditer</button>`;
+        figureElements.innerHTML = `<img src="${imageUrl}" alt="${titre}"><i data-article-id="${id}" class="image-delete fa-solid fa-trash-can fa-sm"></i><button  class="modal-btn-edite">éditer</button>`;
         if (i === 0) {
             figureElements.innerHTML += `<i class="fa-solid fa-arrows-up-down-left-right fa-sm"></i>`;
         }
@@ -210,7 +207,6 @@ modalCancelBtn.addEventListener("click", function (event) {
 
 // open the modal with all btn edition
 const categoryWorkCreated = document.querySelector("#categorie");
-
 const allBtn = document.querySelectorAll(".myBtn");
 allBtn.forEach((btn) => {
     btn.onclick = function () {
@@ -253,7 +249,6 @@ window.onclick = function (event) {
         modalValidation.style.display = "none";
     };
 };
-
 //fin Modal1//
 
 //Modal2//
@@ -262,10 +257,10 @@ btnModal2.addEventListener("click", function () {
     document.querySelector("#myModal").style.display = "none";
     document.querySelector("#myModal2").style.display = "block";
     if (categoryWork.children.length === 0) {
-
         fetchDataCategory();
     };
-})
+});
+
 const btnReturn = document.querySelector(".fa-arrow-left");
 
 btnReturn.addEventListener("click", function () {
@@ -310,7 +305,6 @@ let titleWork = document.getElementById('titre');
 const categoryWork = document.getElementById('categorie');
 const imagePreview = document.getElementById('imagePreview');
 const imageFail = document.getElementById('image-fail');
-
 let imageWork = "";
 
 //function reset 
@@ -374,7 +368,6 @@ const eventCallback = (event) => {
     SendPush("Veuillez remplir le formulaire", "red");
 };
 btn.addEventListener('click', eventCallback);
-
 
 // listener a l'input image
 inputImage.addEventListener('change', () => {
