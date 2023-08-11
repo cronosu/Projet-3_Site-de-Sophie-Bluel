@@ -29,6 +29,31 @@ const fetchData = async (url, callback) => {
     }
 };
 
+/**
+ * Creates a new HTML element with the specified tag and content.
+ * @param {string} elem - The HTML tag name of the element to be created.
+ * @param {string} content - The text content to be set for the created element.
+ * @returns {HTMLElement} - The newly created HTML element with the specified tag and content.
+ */
+const createElemt = (elem, content) => {
+    const elemCreated = document.createElement(elem);
+    elemCreated.innerHTML += content;
+    return elemCreated;
+};
+
+/*  manip du DOM */
+const showData = (data) => {
+    const gallery = document.querySelector(".gallery");
+    gallery.innerHTML = "";
+    for (let i = 0; i < data.length; i++) {
+        const { imageUrl: img, title: titre } = data[i];
+        //const img = data[i].imageUrl;
+        //const titre = data[i].title;
+        const article = createElemt("figure", `<img src="${img}" alt="${titre}"><figcaption>${titre}</figcaption>`);
+        gallery.appendChild(article);
+    }
+};
+
 /** fetch datas from API and build elements from filter datas
  * @param {integer} btnFiltre number of button
 */
@@ -46,31 +71,6 @@ const fetchFilteredDataAndDisplay = async (btnFiltre) => {
     });
 }
 
-/*  manip du DOM */
-const showData = (data) => {
-    const gallery = document.querySelector(".gallery");
-    gallery.innerHTML = "";
-    for (let i = 0; i < data.length; i++) {
-        const img = createElemt("img", "");
-        img.src = data[i].imageUrl;
-        const titre = data[i].title;
-        const article = createElemt("figure", `<img src="${img.src}" alt="${titre}"><figcaption>${titre}</figcaption>`);
-        gallery.appendChild(article);
-    }
-};
-
-/**
- * Creates a new HTML element with the specified tag and content.
- * @param {string} elem - The HTML tag name of the element to be created.
- * @param {string} content - The text content to be set for the created element.
- * @returns {HTMLElement} - The newly created HTML element with the specified tag and content.
- */
-const createElemt = (elem, content) => {
-    const elemCreated = document.createElement(elem);
-    elemCreated.innerHTML += content;
-    return elemCreated;
-};
-
 const filtre = document.querySelector(".mes-projets-filtre-ul");
 const li = filtre.querySelectorAll("li");
 const btn1 = document.querySelector(".mes-projets-filtre-li-1");
@@ -79,10 +79,15 @@ const btn3 = document.querySelector(".mes-projets-filtre-li-3");
 const btn4 = document.querySelector(".mes-projets-filtre-li-4");
 const gallery = document.querySelector(".gallery");
 
+
+/** 
+ * @param {string} btnFiltre button that needs to change color
+*/
 function changeColorInFiltre(btnFiltre) {
     gallery.innerHTML = ``;
     li.forEach((el) => {
         el.classList.remove("color");
+        btn1.classList.remove("color-default");
     });
     btnFiltre.classList.add("color")
 };
@@ -90,6 +95,7 @@ function changeColorInFiltre(btnFiltre) {
 btn1.addEventListener("click", function () {
     changeColorInFiltre(btn1);
     fetchData("http://localhost:5678/api/works/", showData);
+
 });
 
 btn2.addEventListener("click", function () {
@@ -112,6 +118,7 @@ btn4.addEventListener("click", function () {
 var modal = document.getElementById("myModal");
 var modal2 = document.getElementById("myModal2");
 var modalValidation = document.getElementById("deleteConfirmationModal");
+
 // Get gallery on the modal
 const fetchDataAndDisplayOnModal = async () => {
     const res = await fetch('http://localhost:5678/api/works/');
@@ -119,9 +126,10 @@ const fetchDataAndDisplayOnModal = async () => {
     const galleryModeEdition = document.querySelector(".modal-content-galery");
     galleryModeEdition.innerHTML = "";
     for (let i = 0; i < data.length; i++) {
-        const id = data[i].id;
-        const imageUrl = data[i].imageUrl;
-        const titre = data[i].title;
+        const{ id:id, imageUrl:imageUrl, title:titre} = data[i];
+        //const id = data[i].id;
+        //const imageUrl = data[i].imageUrl;
+        //const titre = data[i].title;
         const figureElements = document.createElement('figure');
         figureElements.innerHTML = `<img src="${imageUrl}" alt="${titre}"><i data-article-id="${id}" class="image-delete fa-solid fa-trash-can fa-sm"></i><button  class="modal-btn-edite">éditer</button>`;
         if (i === 0) {
@@ -129,7 +137,6 @@ const fetchDataAndDisplayOnModal = async () => {
         }
         galleryModeEdition.appendChild(figureElements);
         const btnDelete = document.querySelectorAll(".image-delete");
-
         btnDelete[i].addEventListener("click", function (event) {
             event.preventDefault();
             const id = event.target.dataset.articleId;
@@ -464,6 +471,7 @@ titleWork.addEventListener('change', updateButtonColor);
 categoryWork.addEventListener('change', updateButtonColor);
 
 //fin Modal2//
+
 const init = () => {
     fetchData("http://localhost:5678/api/works/", showData);
 };

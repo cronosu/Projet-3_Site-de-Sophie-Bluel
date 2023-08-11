@@ -188,10 +188,6 @@ nav li {
 	font-size: 1.2em;
 }
 
-li:hover {
-	color: #B1663C;
-}
-
 #introduction {
 	display: flex;
 	align-items: center;
@@ -330,7 +326,6 @@ button {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	color: #611d1d;
 	min-width: 100px;
 	border: 1px solid #1D6154;
 	border-radius: 60px;
@@ -339,6 +334,10 @@ button {
 	font-size: 16px;
 	cursor: pointer;
 }
+.color-default{
+	background-color: #1D6154;
+	color: white;
+	}
 
 .mes-projet-filtre ul .color,
 .modal-content-btn-ajout-photo {
