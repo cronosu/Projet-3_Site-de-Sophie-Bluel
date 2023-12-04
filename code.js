@@ -1,3 +1,7 @@
+const port = 5678; 
+const url = new URL(window.location.href);
+
+
 if (localStorage.getItem("token")) {
     console.log(localStorage.getItem("token"));
     const logginBtn = document.querySelectorAll(".log");
@@ -58,7 +62,7 @@ const showData = (data) => {
  * @param {integer} btnFiltre number of button
 */
 const fetchFilteredDataAndDisplay = async (btnFiltre) => {
-    const res = await fetch('./api/works/');
+    const res = await fetch(`${url.protocol}//${url.hostname}:${port}/api/works/`);
     const data = await res.json();
     const dataFiltre = data.filter(element => element.categoryId == btnFiltre);
     const gallery = document.querySelector(".gallery");
@@ -94,7 +98,7 @@ function changeColorInFiltre(btnFiltre) {
 
 btn1.addEventListener("click", function () {
     changeColorInFiltre(btn1);
-    fetchData("./api/works/", showData);
+    fetchData(`${url.protocol}//${url.hostname}:${port}/api/works/`, showData);
 
 });
 
@@ -121,7 +125,7 @@ var modalValidation = document.getElementById("deleteConfirmationModal");
 
 // Get gallery on the modal
 const fetchDataAndDisplayOnModal = async () => {
-    const res = await fetch('./api/works/');
+    const res = await fetch(`${url.protocol}//${url.hostname}:${port}/api/works/`);
     const data = await res.json();
     const galleryModeEdition = document.querySelector(".modal-content-galery");
     galleryModeEdition.innerHTML = "";
@@ -191,7 +195,7 @@ modalConfirmBtn.addEventListener("click", async function (event) {
 
     // Supprimer les articles après confirmation
     event.preventDefault();
-    const res = await fetch("./api/works/");
+    const res = await fetch(`${url.protocol}//${url.hostname}:${port}/api/works/`);
     const data = await res.json();
 
     for (let i = 0; i < data.length; i++) {
@@ -281,7 +285,7 @@ btnReturn.addEventListener("click", function () {
 
 //Add categorie at modal 2//
 const fetchDataCategory = async () => {
-    const res = await fetch('./api/categories/');
+    const res = await fetch(`${url.protocol}//${url.hostname}:${port}/api/categories/`);
     const data = await res.json();
     const choise0 = createElemt("option", " ");
     categoryWorkCreated.appendChild(choise0);
@@ -473,7 +477,7 @@ categoryWork.addEventListener('change', updateButtonColor);
 //fin Modal2//
 
 const init = () => {
-    fetchData("./api/works/", showData);
+    fetchData(`${url.protocol}//${url.hostname}:${port}/api/works/`, showData);
 };
 
 init();
