@@ -58,7 +58,7 @@ const showData = (data) => {
  * @param {integer} btnFiltre number of button
 */
 const fetchFilteredDataAndDisplay = async (btnFiltre) => {
-    const res = await fetch('http://localhost:5678/api/works/');
+    const res = await fetch('./api/works/');
     const data = await res.json();
     const dataFiltre = data.filter(element => element.categoryId == btnFiltre);
     const gallery = document.querySelector(".gallery");
@@ -94,7 +94,7 @@ function changeColorInFiltre(btnFiltre) {
 
 btn1.addEventListener("click", function () {
     changeColorInFiltre(btn1);
-    fetchData("http://localhost:5678/api/works/", showData);
+    fetchData("./api/works/", showData);
 
 });
 
@@ -121,7 +121,7 @@ var modalValidation = document.getElementById("deleteConfirmationModal");
 
 // Get gallery on the modal
 const fetchDataAndDisplayOnModal = async () => {
-    const res = await fetch('http://localhost:5678/api/works/');
+    const res = await fetch('./api/works/');
     const data = await res.json();
     const galleryModeEdition = document.querySelector(".modal-content-galery");
     galleryModeEdition.innerHTML = "";
@@ -140,11 +140,11 @@ const fetchDataAndDisplayOnModal = async () => {
         btnDelete[i].addEventListener("click", function (event) {
             event.preventDefault();
             const id = event.target.dataset.articleId;
-            deleteWork(`http://localhost:5678/api/works/${id}`)
+            deleteWork(`./api/works/${id}`)
                 .then(() => {
                     console.log(`L'article avec l'ID ${id} a été supprimé.`);
                     fetchDataAndDisplayOnModal();
-                    fetchData("http://localhost:5678/api/works/", showData);
+                    fetchData("./api/works/", showData);
                 })
         })
     };
@@ -191,15 +191,15 @@ modalConfirmBtn.addEventListener("click", async function (event) {
 
     // Supprimer les articles après confirmation
     event.preventDefault();
-    const res = await fetch("http://localhost:5678/api/works/");
+    const res = await fetch("./api/works/");
     const data = await res.json();
 
     for (let i = 0; i < data.length; i++) {
         const id = data[i].id;
         setTimeout(async () => {
-            await deleteWork(`http://localhost:5678/api/works/${id}`);
+            await deleteWork(`./works/${id}`);
             fetchDataAndDisplayOnModal();
-            fetchData("http://localhost:5678/api/works/", showData);
+            fetchData("./api/works/", showData);
         }, i * 400);
     }
 });
@@ -238,7 +238,7 @@ span.forEach(span => {
         modal.style.display = "none";
         modal2.style.display = "none";
         categoryWorkCreated.innerHTML = "";
-        fetchData("http://localhost:5678/api/works/", showData);
+        fetchData("./api/works/", showData);
         reset();
     };
 });
@@ -249,7 +249,7 @@ window.onclick = function (event) {
         modal.style.display = "none";
         modal2.style.display = "none";
         document.querySelector(".modal-validation").style.display = "none";
-        fetchData("http://localhost:5678/api/works/", showData);
+        fetchData("./api/works/", showData);
         reset();
         categoryWorkCreated.innerHTML = "";
     } else if (event.target == modalValidation) {
@@ -281,7 +281,7 @@ btnReturn.addEventListener("click", function () {
 
 //Add categorie at modal 2//
 const fetchDataCategory = async () => {
-    const res = await fetch('http://localhost:5678/api/categories/');
+    const res = await fetch('./api/categories/');
     const data = await res.json();
     const choise0 = createElemt("option", " ");
     categoryWorkCreated.appendChild(choise0);
@@ -431,7 +431,7 @@ const sendWork = async (event) => {
     }
     formData.append("title", titleWork.value);
     formData.append("category", selectedCategoryIdInSelect);
-    const response = await fetch("http://localhost:5678/api/works", {
+    const response = await fetch("./api/works", {
         method: "POST",
         headers: {
             "Authorization": `Bearer ${localStorage.getItem("token")}`
@@ -441,7 +441,7 @@ const sendWork = async (event) => {
     if (response.ok) {
         SendPush("Projet envoyé", "green");
         resetAfterSendPush();
-        fetchData("http://localhost:5678/api/works/", showData);
+        fetchData("./api/works/", showData);
         fetchDataAndDisplayOnModal();
     } else if (response.status === 400 && titleWork.value.trim() == "") {
         SendPush("Veuillez remplir le formulaire", "red");
@@ -473,7 +473,7 @@ categoryWork.addEventListener('change', updateButtonColor);
 //fin Modal2//
 
 const init = () => {
-    fetchData("http://localhost:5678/api/works/", showData);
+    fetchData("./api/works/", showData);
 };
 
 init();
