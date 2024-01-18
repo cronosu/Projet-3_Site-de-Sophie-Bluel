@@ -1,38 +1,11 @@
-const port = 5678; 
+const port = 5678;
 const url = new URL(window.location.href);
+/*`${url.protocol}//${url.hostname}:${port}/api/works/`*/
+const filtre = document.querySelector(".mes-projets-filtre-ul");
 
 
-if (localStorage.getItem("token")) {
-    console.log(localStorage.getItem("token"));
-    const logginBtn = document.querySelectorAll(".log");
-    const filtre = document.querySelector(".mes-projet-filtre");
-    filtre.classList.toggle("loginSwitchButDisplay");
-    logginBtn.forEach((element) => {
-        element.classList.toggle("loginSwitch");
-    });
-}
-
-const buttonLogOut = document.querySelector(".logOut");
-buttonLogOut.addEventListener("click", function () {
-    localStorage.removeItem("token");
-    window.location.reload();
-});
-
-/** 
- * @param {string} url  - API endpoint
- * @param {function} callback  - function to call once the data is reached
- */
-const fetchData = async (url, callback) => {
-    try {
-        const res = await fetch(url);
-        const data = await res.json();
-        callback(data);
-    } catch (Error) {
-        let header = document.querySelector('.image-sophie-bluel');
-        header.innerHTML = '<img src="./assets/images/404.jpeg" alt="page404">';
-    }
-};
-
+const gallery = document.querySelector(".gallery");
+console.log();
 /**
  * Creates a new HTML element with the specified tag and content.
  * @param {string} elem - The HTML tag name of the element to be created.
@@ -44,6 +17,71 @@ const createElemt = (elem, content) => {
     elemCreated.innerHTML += content;
     return elemCreated;
 };
+/*Filtre */
+
+const fetchDataCategoryInit = async () => {
+
+    const res = await fetch(`${url.protocol}//${url.hostname}:${port}/api/categories/`);
+    const data = await res.json();
+    const filtreInit = document.querySelector(".mes-projets-filtre-ul");
+    const btnTous = createElemt("li", "Tous");
+    btnTous.classList.add("color");
+    btnTous.addEventListener("click", function () {
+        changeColorInFiltre(btnTous);
+        fetchData(`${url.protocol}//${url.hostname}:${port}/api/works/`, showData);
+    });
+
+    filtreInit.appendChild(btnTous);
+    for (let i = 0; i < data.length; i++) {
+  
+        const btnFiltre = createElemt("li", data[i].name);
+        btnFiltre.classList.add(`mes-projets-filtre-li-${i + 1}`);
+        filtreInit.appendChild(btnFiltre);
+        btnFiltre.addEventListener("click", function (e) {
+        changeColorInFiltre(btnFiltre);
+        fetchFilteredDataAndDisplay(i+1);
+    });
+
+    }
+
+    const buttonLogOut = document.querySelector(".logOut");
+    buttonLogOut.addEventListener("click", function () {
+        localStorage.removeItem("token");
+        window.location.reload();
+    });
+};
+fetchDataCategoryInit();
+
+if (localStorage.getItem("token")) {
+    console.log(localStorage.getItem("token"));
+    const logginBtn = document.querySelectorAll(".log");
+    const filtre = document.querySelector(".mes-projet-filtre");
+    filtre.classList.toggle("loginSwitchButDisplay");
+    logginBtn.forEach((element) => {
+        element.classList.toggle("loginSwitch");
+    });
+}
+
+
+
+/**
+ * @param {string} url  - API endpoint
+ * @param {function} callback  - function to call once the data is reached
+ */
+const fetchData = async (url, callback) => {
+    try {
+        const res = await fetch(url);
+
+        const data = await res.json();
+        callback(data);
+    } catch (Error) {
+       /* let header = document.querySelector('.image-sophie-bluel');
+        header.innerHTML = '<img src="./assets/images/404.jpeg" alt="page404">';*/
+        console.error(Error, url);
+    }
+};
+
+
 
 /*  manip du DOM */
 const showData = (data) => {
@@ -75,13 +113,6 @@ const fetchFilteredDataAndDisplay = async (btnFiltre) => {
     });
 }
 
-const filtre = document.querySelector(".mes-projets-filtre-ul");
-const li = filtre.querySelectorAll("li");
-const btn1 = document.querySelector(".mes-projets-filtre-li-1");
-const btn2 = document.querySelector(".mes-projets-filtre-li-2");
-const btn3 = document.querySelector(".mes-projets-filtre-li-3");
-const btn4 = document.querySelector(".mes-projets-filtre-li-4");
-const gallery = document.querySelector(".gallery");
 
 
 /** 
@@ -89,33 +120,18 @@ const gallery = document.querySelector(".gallery");
 */
 function changeColorInFiltre(btnFiltre) {
     gallery.innerHTML = ``;
-    li.forEach((el) => {
-        el.classList.remove("color");
-        btn1.classList.remove("color-default");
-    });
-    btnFiltre.classList.add("color")
+    const li = filtre.querySelectorAll("li");
+
+    if (!btnFiltre.classList.contains("color")) {
+        li.forEach((el) => {
+            el.classList.remove("color"); 
+        });
+    }
+    btnFiltre.classList.add("color");
 };
 
-btn1.addEventListener("click", function () {
-    changeColorInFiltre(btn1);
-    fetchData(`${url.protocol}//${url.hostname}:${port}/api/works/`, showData);
 
-});
 
-btn2.addEventListener("click", function () {
-    changeColorInFiltre(btn2)
-    fetchFilteredDataAndDisplay(1);
-});
-
-btn3.addEventListener("click", function () {
-    changeColorInFiltre(btn3)
-    fetchFilteredDataAndDisplay(2);
-});
-
-btn4.addEventListener("click", function () {
-    changeColorInFiltre(btn4)
-    fetchFilteredDataAndDisplay(3);
-});
 
 //Modal1//
 // Get the modal
@@ -130,7 +146,7 @@ const fetchDataAndDisplayOnModal = async () => {
     const galleryModeEdition = document.querySelector(".modal-content-galery");
     galleryModeEdition.innerHTML = "";
     for (let i = 0; i < data.length; i++) {
-        const{ id:id, imageUrl:imageUrl, title:titre} = data[i];
+        const { id: id, imageUrl: imageUrl, title: titre } = data[i];
         //const id = data[i].id;
         //const imageUrl = data[i].imageUrl;
         //const titre = data[i].title;
@@ -242,7 +258,7 @@ span.forEach(span => {
         modal.style.display = "none";
         modal2.style.display = "none";
         categoryWorkCreated.innerHTML = "";
-        fetchData("./api/works/", showData);
+        fetchData(`${url.protocol}//${url.hostname}:${port}/api/works/`, showData);
         reset();
     };
 });
@@ -253,7 +269,7 @@ window.onclick = function (event) {
         modal.style.display = "none";
         modal2.style.display = "none";
         document.querySelector(".modal-validation").style.display = "none";
-        fetchData("./api/works/", showData);
+        fetchData(`${url.protocol}//${url.hostname}:${port}/api/works/`, showData);
         reset();
         categoryWorkCreated.innerHTML = "";
     } else if (event.target == modalValidation) {
